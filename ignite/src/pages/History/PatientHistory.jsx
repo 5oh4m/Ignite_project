@@ -18,23 +18,23 @@ const PatientHistory = () => {
 
             <div className="relative">
                 {/* Vertical Line */}
-                <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-slate-200"></div>
+                <div className="absolute left-[6.25rem] top-0 bottom-0 w-0.5 bg-slate-200"></div>
 
                 <div className="space-y-12">
                     {history.map((item) => (
-                        <div key={item.id} className="relative pl-24 group">
+                        <div key={item.id} className="relative pl-40 group">
                             {/* Timeline Dot */}
-                            <div className={`absolute left-[1.9rem] top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm ring-2 ring-slate-200 ${item.color}`}></div>
+                            <div className={`absolute left-[5.75rem] top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm ring-2 ring-slate-200 ${item.color}`}></div>
 
                             {/* Date Tag */}
-                            <div className="absolute left-0 top-1 text-xs font-bold text-slate-400 w-16 text-right">
+                            <div className="absolute left-0 top-1 text-xs font-bold text-slate-400 w-20 text-right">
                                 {item.date}
                             </div>
 
                             {/* Content Card */}
                             <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all relative">
                                 {/* Icon */}
-                                <div className={`absolute -left-16 top-6 w-10 h-10 rounded-xl ${item.color} text-white flex items-center justify-center shadow-lg`}>
+                                <div className={`absolute -left-20 top-6 w-10 h-10 rounded-xl ${item.color} text-white flex items-center justify-center shadow-lg`}>
                                     <item.icon className="w-5 h-5" />
                                 </div>
 

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, User, ArrowRight, Github, Chrome } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const AuthPage = () => {
+const AuthPage = ({ onLogin }) => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(location.state?.isLogin ?? true);
     const [formData, setFormData] = useState({
         name: '',
@@ -31,6 +32,8 @@ const AuthPage = () => {
         if (validate()) {
             console.log('Form submitted:', formData);
             // Mock login/signup logic here
+            if (onLogin) onLogin();
+            navigate('/');
         }
     };
 

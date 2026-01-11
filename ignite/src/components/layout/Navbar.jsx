@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { HeartPulse, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
-const Navbar = () => {
+const Navbar = ({ onLogout }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -25,10 +25,22 @@ const Navbar = () => {
                         <div className="ml-10 flex items-baseline space-x-8">
                             <Link to="/" className="text-slate-600 hover:text-calm-blue px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</Link>
                             <Link to="/locator" className="text-slate-600 hover:text-calm-blue px-3 py-2 rounded-md text-sm font-medium transition-colors">Find Hospital</Link>
-                            <Link to="/auth" state={{ isLogin: true }} className="border border-calm-blue text-calm-blue px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-calm-blue hover:text-white transition-all shadow-sm">Login</Link>
-                            <Link to="/auth" state={{ isLogin: false }} className="bg-calm-blue text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-calm-blue-dark transition-all shadow-lg hover:shadow-calm-blue/30 transform hover:-translate-y-0.5">
-                                Sign Up
-                            </Link>
+                            {onLogout && (
+                                <button
+                                    onClick={onLogout}
+                                    className="bg-emergency-red/10 text-emergency-red border border-emergency-red/20 px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-emergency-red hover:text-white transition-all shadow-sm"
+                                >
+                                    Logout
+                                </button>
+                            )}
+                            {!onLogout && (
+                                <>
+                                    <Link to="/auth" state={{ isLogin: true }} className="border border-calm-blue text-calm-blue px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-calm-blue hover:text-white transition-all shadow-sm">Login</Link>
+                                    <Link to="/auth" state={{ isLogin: false }} className="bg-calm-blue text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-calm-blue-dark transition-all shadow-lg hover:shadow-calm-blue/30 transform hover:-translate-y-0.5">
+                                        Sign Up
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     </div>
 
@@ -49,8 +61,14 @@ const Navbar = () => {
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                         <Link to="/" className="text-slate-600 hover:text-calm-blue block px-3 py-2 rounded-md text-base font-medium">Home</Link>
                         <Link to="/locator" className="text-slate-600 hover:text-calm-blue block px-3 py-2 rounded-md text-base font-medium">Find Hospital</Link>
-                        <Link to="/auth" state={{ isLogin: true }} className="text-slate-600 hover:text-calm-blue block px-3 py-2 rounded-md text-base font-medium">Login</Link>
-                        <Link to="/auth" state={{ isLogin: false }} className="text-slate-600 hover:text-calm-blue block px-3 py-2 rounded-md text-base font-medium">Sign Up</Link>
+                        {onLogout ? (
+                            <button onClick={onLogout} className="text-left w-full text-emergency-red hover:bg-emergency-red/10 block px-3 py-2 rounded-md text-base font-medium">Logout</button>
+                        ) : (
+                            <>
+                                <Link to="/auth" state={{ isLogin: true }} className="text-slate-600 hover:text-calm-blue block px-3 py-2 rounded-md text-base font-medium">Login</Link>
+                                <Link to="/auth" state={{ isLogin: false }} className="text-slate-600 hover:text-calm-blue block px-3 py-2 rounded-md text-base font-medium">Sign Up</Link>
+                            </>
+                        )}
                     </div>
                 </div>
             )}
