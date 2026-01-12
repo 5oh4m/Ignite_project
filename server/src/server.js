@@ -12,8 +12,6 @@ import appointmentRoutes from "./routes/appointmentRoutes.js";
 import hospitalRoutes from "./routes/hospitalRoutes.js";
 import recordRoutes from "./routes/recordRoutes.js";
 import timelineRoutes from "./routes/timelineRoutes.js";
-import seedRoutes from "./routes/seedRoutes.js";
-import adminRoutes from "./routes/adminRoutes.js";
 
 dotenv.config();
 
@@ -65,7 +63,6 @@ app.use("/api/appointments", appointmentRoutes);
 app.use("/api/hospitals", hospitalRoutes);
 app.use("/api/records", recordRoutes);
 app.use("/api/timeline", timelineRoutes);
-app.use("/api/seed", seedRoutes); // Added seed route
 import adminRoutes from "./routes/adminRoutes.js";
 app.use("/api/admin", adminRoutes);
 
