@@ -66,6 +66,10 @@ app.use("/api/timeline", timelineRoutes);
 import adminRoutes from "./routes/adminRoutes.js";
 app.use("/api/admin", adminRoutes);
 
+// Temporary Seeding Route
+import seedRoutes from "./routes/seedRoutes.js";
+app.use("/api/seed", seedRoutes);
+
 // Global Error Handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
