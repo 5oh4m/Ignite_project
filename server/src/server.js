@@ -14,9 +14,22 @@ import recordRoutes from "./routes/recordRoutes.js";
 import timelineRoutes from "./routes/timelineRoutes.js";
 
 dotenv.config();
+
+// Connect to DB (will be cached)
 connectDB();
 
 const app = express();
+
+// Middleware to ensure DB is connected for every request (critical for serverless)
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        console.error("Database connection failed:", error);
+        res.status(500).json({ success: false, message: "Database connection error" });
+    }
+});
 
 // Middleware - CORS FIRST with permissive settings
 app.use(cors({

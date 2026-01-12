@@ -43,14 +43,15 @@ CORS Error: Access to XMLHttpRequest blocked - No 'Access-Control-Allow-Origin' 
 
 6. **Click "Save"** after adding each variable
 
-### Step 2: Verify MongoDB Atlas Network Access
+### Step 2: ⚠️ CRITICAL: Allow All IPs (Fix Timeout Error)
+**Error: `buffering timed out` means Vercel cannot reach MongoDB.**
 
 1. Go to **MongoDB Atlas**: https://cloud.mongodb.com
 2. Click on **Network Access** in the left sidebar
-3. Make sure **`0.0.0.0/0`** is in the IP Access List (allows all IPs)
-   - If not, click **"Add IP Address"**
-   - Select **"Allow Access from Anywhere"**
-   - Click **"Confirm"**
+3. ❌ If you only see your current IP, **IT WILL FAIL**.
+4. ✅ Click **"Add IP Address"**
+5. Select **"Allow Access from Anywhere"** (0.0.0.0/0)
+6. Click **"Confirm"** and wait for it to become "Active" (green)
 
 ### Step 3: Redeploy Your Backend
 
