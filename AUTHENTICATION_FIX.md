@@ -53,23 +53,44 @@ CORS Error: Access to XMLHttpRequest blocked - No 'Access-Control-Allow-Origin' 
 5. Select **"Allow Access from Anywhere"** (0.0.0.0/0)
 6. Click **"Confirm"** and wait for it to become "Active" (green)
 
-### Step 3: Redeploy Your Backend
+### Step 4: ⚠️ CRITICAL: Fix "bad auth" (Wrong Password)
+**Error: `bad auth : authentication failed` means your password in MONGODB_URI is wrong.**
 
-After adding the environment variables, you MUST redeploy:
+1. Go to **MongoDB Atlas**: https://cloud.mongodb.com
+2. Click **Database Access** (left sidebar).
+3. Find your user (e.g., `tejugeeta746_db_user`).
+4. Click **Edit** -> **Edit Password**.
+5. **Set a simple password** (e.g., `MedLink12345` - minimal special chars).
+6. **Update Vercel Environment Variable**:
+   - Go to Vercel -> Settings -> Environment Variables.
+   - Edit `MONGODB_URI`.
+   - Update the password part: `...:MedLink12345@...`
+   - **Save**.
 
-**Option A: Via Vercel Dashboard**
-1. Go to your backend project in Vercel
-2. Click on the **"Deployments"** tab
-3. Find the latest deployment
-4. Click the **three dots (⋮)** menu
-5. Select **"Redeploy"**
-6. Confirm the redeployment
+### Step 5: Redeploy Your Backend (AGAIN)
+**You must redeploy for the new password to take effect.**
 
-**Option B: Via CLI**
-```bash
-cd /Users/5oh4m/Desktop/ignite_proj/Ignite_project/server
-npx vercel --prod
-```
+1. Go to Deployments.
+2. Click Redeploy.
+
+### Step 6: ⚠️ CRITICAL: Fix "secretOrPrivateKey must have a value"
+**Error: This means `JWT_SECRET` is missing in Vercel.**
+
+1. Go to **Vercel** -> Settings -> Environment Variables.
+2. Check if `JWT_SECRET` exists.
+   - ❌ If NOT, Add it:
+     - **Name**: `JWT_SECRET`
+     - **Value**: `eb0d2c184d7e701a74b865cbb1c01d0ee1fcddad2e3dcb074d64b4f150160836dd9497b94e849573cc90d4a46aafd09d65b182e6064b31f52815853c4479dd2f`
+     - **Environment**: Production, Preview, Development
+   - ❌ If key exists but empty value, delete and re-add.
+3. Also Add `JWT_REFRESH_SECRET` (just in case):
+   - **Name**: `JWT_REFRESH_SECRET`
+   - **Value**: `another_long_random_string_for_refresh_token_security`
+
+### Step 7: Redeploy Backend (AGAIN)
+**You must always redeploy after changing Env Vars.**
+
+1. Go to Deployments -> Redeploy.
 
 **Option C: Push to GitHub (Triggers Auto-Deploy)**
 ```bash

@@ -20,7 +20,7 @@ const Appointments = () => {
     const { data, isLoading } = useQuery({
         queryKey: ['my-appointments'],
         queryFn: async () => {
-            const res = await api.get('/appointments');
+            const res = await api.get('/appointments/me'); // Fixed: Use /me for patient appointments
             return res.data.appointments;
         }
     });
