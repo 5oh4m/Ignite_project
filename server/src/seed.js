@@ -13,29 +13,72 @@ const seedData = async () => {
 
         console.log('🌱 Seeding data...');
 
-        // 1. Seed Hospital
-        let hospital = await Hospital.findOne({ name: 'City General Hospital' });
-        if (!hospital) {
-            hospital = await Hospital.create({
+        // 1. Seed Hospitals
+        const sampleHospitals = [
+            {
                 name: 'City General Hospital',
-                address: {
-                    street: '123 Health Ave',
-                    city: 'Metropolis',
-                    state: 'NY',
-                    zip: '10001',
-                    country: 'USA'
-                },
-                location: {
-                    type: 'Point',
-                    coordinates: [-74.006, 40.7128] // NYC
-                },
-                phone: '+1-555-0123',
-                email: 'contact@citygeneral.com',
-                departments: ['Cardiology', 'Neurology', 'Pediatrics', 'Orthopedics'],
-                totalBeds: 500,
-                availableBeds: 120,
-            });
-            console.log('✅ Hospital seeded');
+                city: 'New York',
+                state: 'NY',
+                zip: '10001',
+                coords: [-74.006, 40.7128]
+            },
+            {
+                name: 'Westside Medical Center',
+                city: 'Los Angeles',
+                state: 'CA',
+                zip: '90001',
+                coords: [-118.2437, 34.0522]
+            },
+            {
+                name: 'Lakeside Health Institute',
+                city: 'Chicago',
+                state: 'IL',
+                zip: '60601',
+                coords: [-87.6298, 41.8781]
+            },
+            {
+                name: 'Sunshine State Hospital',
+                city: 'Miami',
+                state: 'FL',
+                zip: '33101',
+                coords: [-80.1918, 25.7617]
+            },
+            {
+                name: 'Central Tech Hospital',
+                city: 'Austin',
+                state: 'TX',
+                zip: '73301',
+                coords: [-97.7431, 30.2672]
+            }
+        ];
+
+        let createdHospitals = [];
+
+        for (const h of sampleHospitals) {
+            let hospital = await Hospital.findOne({ name: h.name });
+            if (!hospital) {
+                hospital = await Hospital.create({
+                    name: h.name,
+                    address: {
+                        street: '123 Health Ave',
+                        city: h.city,
+                        state: h.state,
+                        zip: h.zip,
+                        country: 'USA'
+                    },
+                    location: {
+                        type: 'Point',
+                        coordinates: h.coords
+                    },
+                    phone: '+1-555-0123',
+                    email: `contact@${h.name.toLowerCase().replace(/\s/g, '')}.com`,
+                    departments: ['Cardiology', 'Neurology', 'Pediatrics', 'Orthopedics'],
+                    totalBeds: 500,
+                    availableBeds: Math.floor(Math.random() * 200),
+                });
+                console.log(`✅ Hospital seeded: ${h.name}`);
+            }
+            createdHospitals.push(hospital);
         }
 
         // 2. Seed Admin
@@ -51,38 +94,39 @@ const seedData = async () => {
             console.log('✅ Admin user seeded');
         }
 
-        // 3. Seed Doctor
-        const doctorEmail = 'doctor@medlink.com';
-        const doctorUserExists = await User.findOne({ email: doctorEmail });
-        let doctorUser = doctorUserExists;
+        // 3. Seed Doctors for each hospital
+        for (const hospital of createdHospitals) {
+            const doctorEmail = `dr.${hospital.name.split(' ')[0].toLowerCase()}@medlink.com`;
+            let doctorUser = await User.findOne({ email: doctorEmail });
 
-        if (!doctorUser) {
-            doctorUser = await User.create({
-                name: 'Dr. John Smith',
-                email: doctorEmail,
-                password: 'doctorpassword123',
-                role: 'doctor',
-            });
-            console.log('✅ Doctor user seeded');
-        }
+            if (!doctorUser) {
+                doctorUser = await User.create({
+                    name: `Dr. (${hospital.name.split(' ')[0]})`,
+                    email: doctorEmail,
+                    password: 'doctorpassword123',
+                    role: 'doctor',
+                });
+                console.log(`✅ Doctor user created for ${hospital.name}`);
+            }
 
-        const doctorProfileExists = await Doctor.findOne({ user: doctorUser._id });
-        if (!doctorProfileExists) {
-            await Doctor.create({
-                user: doctorUser._id,
-                specialization: 'Cardiology',
-                qualifications: ['MBBS', 'MD'],
-                experienceYears: 10,
-                hospital: hospital._id,
-                consultationFee: 100,
-                availability: [
-                    { day: 'Monday', slots: [{ startTime: '09:00', endTime: '12:00' }] },
-                    { day: 'Wednesday', slots: [{ startTime: '14:00', endTime: '18:00' }] }
-                ],
-                licenseNumber: 'MD123456',
-                isVerified: true
-            });
-            console.log('✅ Doctor profile seeded');
+            const doctorProfileExists = await Doctor.findOne({ user: doctorUser._id });
+            if (!doctorProfileExists) {
+                await Doctor.create({
+                    user: doctorUser._id,
+                    specialization: 'Cardiology',
+                    qualifications: ['MBBS', 'MD'],
+                    experienceYears: Math.floor(Math.random() * 20) + 5,
+                    hospital: hospital._id,
+                    consultationFee: 100 + Math.floor(Math.random() * 50),
+                    availability: [
+                        { day: 'Monday', slots: [{ startTime: '09:00', endTime: '12:00' }] },
+                        { day: 'Wednesday', slots: [{ startTime: '14:00', endTime: '18:00' }] }
+                    ],
+                    licenseNumber: `MD${Math.floor(Math.random() * 100000)}`,
+                    isVerified: true
+                });
+                console.log(`✅ Doctor profile created for ${hospital.name}`);
+            }
         }
 
         console.log('🎉 Seeding complete!');
